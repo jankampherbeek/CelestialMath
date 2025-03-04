@@ -1,0 +1,14 @@
+ Celestial Math - Copyright (C) Jan Kampherbeek.
+
+ This program is free software; you can redistribute it and/or
+ modify it under the terms of both the GNU General Public License (GPL).
+ This means that you can use this software in your own programs only if your
+ own software is open source.
+ The GPL is published by the Free Software Foundation; either version 3
+ of the License, or (at your option) any later version is effective.
+ This program is distributed in the hope that it will be useful, but
+ WITHOUT ANY WARRANTY; without even the implied warranty of
+ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
+ General Public License for more details.
+
+ You received a copy of the GPL (license.txt) along with this program.

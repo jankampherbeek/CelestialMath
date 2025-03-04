@@ -1,21 +1,70 @@
+/*
+ *  Enigma Astrology Research.
+ *  Copyright (c) Jan Kampherbeek.
+ *  Enigma is open source.
+ *  Please check the file copyright.txt in the root of the source for further details.
+ */
+
 package main
 
 import (
-	"fmt"
+	"celestialmath/frontend"
+	_ "embed"
+	"fyne.io/fyne/v2"
+	"fyne.io/fyne/v2/app"
+	"fyne.io/fyne/v2/theme"
+	"gopkg.in/natefinch/lumberjack.v2"
+	"image/color"
+	"log/slog"
+	"path/filepath"
 )
 
-//TIP <p>To run your code, right-click the code and select <b>Run</b>.</p> <p>Alternatively, click
-// the <icon src="AllIcons.Actions.Execute"/> icon in the gutter and select the <b>Run</b> menu item from here.</p>
+// Embedding font files
+//
+//go:embed fonts/EnigmaAstrology2.ttf
+var fontData []byte
+
+type myTheme struct{}
+
+func (m *myTheme) Font(style fyne.TextStyle) fyne.Resource { // Textstyle is ignored
+	return fyne.NewStaticResource("EnigmaAstrology2.ttf", fontData)
+}
+
+func (m *myTheme) Color(name fyne.ThemeColorName, variant fyne.ThemeVariant) color.Color {
+	return theme.DefaultTheme().Color(name, variant)
+}
+
+func (m *myTheme) Icon(name fyne.ThemeIconName) fyne.Resource {
+	return theme.DefaultTheme().Icon(name)
+}
+
+func (m *myTheme) Size(name fyne.ThemeSizeName) float32 {
+	return theme.DefaultTheme().Size(name)
+}
 
 func main() {
-	//TIP <p>Press <shortcut actionId="ShowIntentionActions"/> when your caret is at the underlined text
-	// to see how GoLand suggests fixing the warning.</p><p>Alternatively, if available, click the lightbulb to view possible fixes.</p>
-	s := "gopher"
-	fmt.Println("Hello and welcome, %s!", s)
+	prepareLogging()
+	slog.Info("Starting Enigma")
+	enigmaApp := app.NewWithID("com.radixpro.enigma")
+	enigmaApp.Settings().SetTheme(&myTheme{})
+	enigmaApp.SetIcon(resourceIconPng)
+	frontend.MakeUI(enigmaApp)
+}
 
-	for i := 1; i <= 5; i++ {
-		//TIP <p>To start your debugging session, right-click your code in the editor and select the Debug option.</p> <p>We have set one <icon src="AllIcons.Debugger.Db_set_breakpoint"/> breakpoint
-		// for you, but you can always add more by pressing <shortcut actionId="ToggleLineBreakpoint"/>.</p>
-		fmt.Println("i =", 100/i)
+func prepareLogging() {
+	// Configure Lumberjack for log rotation
+	logFilename := "." + string(filepath.Separator) + "log" + string(filepath.Separator) + "enigma.log"
+	ljack := &lumberjack.Logger{
+		Filename:   logFilename,
+		MaxSize:    1,    // megabytes   TODO change maxsize of logfile into 10 after rollback functionality could be checked
+		MaxBackups: 5,    // number of backups to keep
+		MaxAge:     50,   // days to keep old logs
+		Compress:   true, // compress old log files
 	}
+	textHandler := slog.NewTextHandler(ljack, &slog.HandlerOptions{
+		Level:     slog.LevelInfo,
+		AddSource: true,
+	})
+	logger := slog.New(textHandler)
+	slog.SetDefault(logger)
 }
