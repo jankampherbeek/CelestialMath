@@ -1,3 +1,10 @@
+/*
+ *  Celestial Math.
+ *  Copyright (c) Jan Kampherbeek.
+ *  Celestial Math is open source.
+ *  Please check the file copyright.txt in the root of the source for further details.
+ */
+
 package frontend
 
 import "fyne.io/fyne/v2"

@@ -1,9 +1,8 @@
 # CelestialMath
 
-A program that provides mathematical calculations for celestial mechanics.
+A Rest API that provides services for celestial mechanics.
 CelestialMath is a toolbox with a wide range of calculations.
-It is developed with GoLang and Fyne. The first versions will run on MacOs and Windows.
-Support for Linux, Android and iOs will be realized in later versions.
+It is developed with GoLang. The API should run on MacOs, Windows, Linux, iOs and Android.
 
 The first releases wil contain some basic calculations but I will add more calculations soon.
 
