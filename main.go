@@ -24,6 +24,7 @@ func main() {
 
 	// Endpoint registreren
 	router.GET("/api/julian-day", GetJulianDay)
+	router.GET("/api/obliquity", GetObliquity)
 
 	// Start de server
 	router.Run(":8080")
@@ -44,6 +45,15 @@ type JulianDayRequest struct {
 type JulianDayResponse struct {
 	JulianDay float64          `json:"julianDay"`
 	Input     JulianDayRequest `json:"input"`
+}
+
+type ObliquityRequest struct {
+	JulianDay float64 `form:"jd" binding:"required"`
+}
+
+type ObliquityResponse struct {
+	Obliquity float64          `json:"obliquity"`
+	Input     ObliquityRequest `json:"input"`
 }
 
 func GetJulianDay(c *gin.Context) {
@@ -89,4 +99,22 @@ func isValidDate(year, month, day int, gregorian bool) bool {
 		}
 	}
 	return day <= daysInMonth[month]
+}
+
+func GetObliquity(c *gin.Context) {
+	var req ObliquityRequest
+	if err := c.ShouldBindQuery(&req); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{
+			"error":   "Invalid input parameters",
+			"details": err.Error(),
+		})
+		return
+	}
+	calc := internal.NewObliquityCalculation()
+	obl := calc.CalcObl(req.JulianDay)
+	c.JSON(http.StatusOK, ObliquityResponse{
+		Obliquity: obl,
+		Input:     req,
+	})
+
 }
