@@ -9,11 +9,25 @@ package main
 
 import (
 	"celestialmath/internal"
-	_ "embed"
 	"github.com/gin-gonic/gin"
 	"net/http"
 	"time"
 )
+
+// @title CelestialMath API
+// @version 0.0
+// @description API server for the calculation of celestial mechanics
+// @host localhost:8080
+// @BasePath /api/v1
+func main() {
+	router := gin.Default()
+
+	// Endpoint registreren
+	router.GET("/api/julian-day", GetJulianDay)
+
+	// Start de server
+	router.Run(":8080")
+}
 
 // JulianDayRequest provides date and time for the calculation of a Julian Day number
 // @Description date, time and indication if Gregoian calendar is used
@@ -30,21 +44,6 @@ type JulianDayRequest struct {
 type JulianDayResponse struct {
 	JulianDay float64          `json:"julianDay"`
 	Input     JulianDayRequest `json:"input"`
-}
-
-// @title CelestialMath API
-// @version 0.0
-// @description API server for the calculation of celestial mechanics
-// @host localhost:8080
-// @BasePath /api/v1
-func main() {
-	router := gin.Default()
-
-	// Endpoint registreren
-	router.GET("/api/julian-day", GetJulianDay)
-
-	// Start de server
-	router.Run(":8080")
 }
 
 func GetJulianDay(c *gin.Context) {
